@@ -1,0 +1,68 @@
+var flowControl = {None : 0, Low : 1, Medium : 2, High : 4};
+var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
+
+(function(Water, undefined){
+	var waterTemperature = faucetWaterTemperature.NotSet;
+	var quantity;
+	Water.WaterTemperature = waterTemperature;
+	Water.Quantity = quantity;
+	Water.setQuantity = function(newValue){
+		this.quantity = newValue;
+	}
+
+	Water.getQuantity = function(){
+		return this.quantity;
+	}
+
+	Water.add = function(quantity){
+		this.quantity += quantity;
+	}
+})(window.Water = window.Water || {});
+
+(function(Faucet, undefined){
+	var flow = flowControl.None;
+	Faucet.Flow = flow;
+	Faucet.open = function(flow){
+		this.flow = flow;
+	}
+
+	Faucet.close = function(){
+		this.flow = faucetControl.None;
+	}
+
+	Faucet.getWater(quantity){
+		var water = new Water();
+		this.open(flowControl.Low);
+		while(water.Quantity < quantity){
+			water.add(this.Flow);
+		}
+		this.close();
+		return water;
+	}
+})(window.Faucet = window.Faucet || {});
+
+(function(Faucet, undefined){
+//Correct way to inherit? Could set prototype of ColdWaterFaucet 
+//to new Faucet?
+	Faucet.ColdWaterFaucet = function(){
+		this.getWater = getWater;
+	}
+
+	function getWater(quantity){
+		var water = Faucet.getWater(quantity);
+		water.WaterTemperature = faucetWaterTemperature.Cold;
+		return water;
+	}
+})(window.Faucet = window.Faucet || {});
+
+(function(Faucet, undefined)){
+	Faucet.WarmWaterFaucet = function(){
+		this.getWater = getWater;
+	}
+
+	function getWater(quantity){
+		var water = Faucet.getWater(quantity);
+		water.WaterTemperature = faucetWaterTemperature.Warm;
+		return water;
+	}
+}(window.Faucet = window.Faucet || {});

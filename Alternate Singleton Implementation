@@ -1,0 +1,89 @@
+var flowControl = { None : 0, Low : 1, Medium : 2, High : 4 };
+var faucetWaterTemperature = { Notset : 0, Cold : 1, Warm : 2 };
+
+function Water(){
+	var waterTemperature = faucetWaterTemperature.NotSet;
+	var quantity;
+	Water.WaterTemperature = waterTemperature;
+	Water.Quantity = quantity;
+	Water.setQuantity = function(newValue){
+		this.quantity = newValue;
+	}
+
+	Water.getQuantity = function(){
+		return this.quantity;
+	}
+
+	Water.add = function(quantity){
+		this.quantity += quantity;
+	}
+}
+
+
+function Faucet(){
+	var flow = flowControl.None;
+	Faucet.Flow = flow;
+	Faucet.open = function(flow){
+		this.flow = flow;
+	}
+
+	Faucet.close = function(){
+		this.flow = faucetControl.None;
+	}
+
+	Faucet.getWater = function(quantity){
+		var water = new Water();
+		this.open(flowControl.Low);
+		while(water.Quantity < quantity){
+			water.add(this.Flow);
+		}
+		this.close();
+		return water;
+	}
+}
+
+
+function ColdWaterFaucet(){
+	ColdWaterFaucet.prototype = new Faucet();
+	ColdWaterFaucet.instance = null;
+	function ColdWaterFaucet(){
+		getInstance();
+		return instance;
+	}
+
+	function getInstance(){
+		if(instance ==  null){
+			instance = new ColdWaterFaucet()
+		}
+	}
+
+	ColdWaterFaucet.getWater = function(quantity){
+		var water = ColdWaterFaucet.prototype.getWater(quantity);
+		water.WaterTemperature = faucetWaterTemperature.Cold;
+		return water;
+	}
+}
+
+function WarmWaterFaucet(){
+	WarmWaterFaucet.prototype = new Faucet();
+	WarmWaterFaucet.instance = null;
+	function WarmWaterFaucet(){
+		getInstance();
+		return instance;
+	}
+
+	function getInstance(){
+		if(instance ==  null){
+			instance = new WarmWaterFaucet()
+		}
+	}
+
+	WarmWaterFaucet.open = Faucet.open;
+	WarmWaterFaucet.close = Faucet.close;
+
+	WarmWaterFaucet.getWater = function(quantity){
+		var water = WarmWaterFaucet.prototype.getWater(quantity);
+		water.WaterTemperature = faucetWaterTemperature.Warm;
+		return water;
+	}
+}	
