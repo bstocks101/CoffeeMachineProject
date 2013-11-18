@@ -1,11 +1,17 @@
 var flowControl = { None : 0, Low : 1, Medium : 2, High : 4 };
 var faucetWaterTemperature = { Notset : 0, Cold : 1, Warm : 2 };
 
+//Objects declared as functions
 function Water(){
+
+	//private instances
 	var waterTemperature = faucetWaterTemperature.NotSet;
 	var quantity;
+	//public instances
 	Water.WaterTemperature = waterTemperature;
 	Water.Quantity = quantity;
+
+	//equivalent to get and set method sin C#
 	Water.setQuantity = function(newValue){
 		this.quantity = newValue;
 	}
@@ -20,6 +26,7 @@ function Water(){
 }
 
 
+//Unsure how to make abstract
 function Faucet(){
 	var flow = flowControl.None;
 	Faucet.Flow = flow;
@@ -28,7 +35,7 @@ function Faucet(){
 	}
 
 	Faucet.close = function(){
-		this.flow = faucetControl.None;
+		this.flow = flowControl.None;
 	}
 
 	Faucet.getWater = function(quantity){
@@ -44,13 +51,16 @@ function Faucet(){
 
 
 function ColdWaterFaucet(){
+	//Trying to inherit Faucet object
 	ColdWaterFaucet.prototype = new Faucet();
 	ColdWaterFaucet.instance = null;
+	//Attempt at singleton implementation in redefined constructor
 	function ColdWaterFaucet(){
 		getInstance();
 		return instance;
 	}
 
+	//Ensures that only one instance exists
 	function getInstance(){
 		if(instance ==  null){
 			instance = new ColdWaterFaucet()
@@ -58,6 +68,7 @@ function ColdWaterFaucet(){
 	}
 
 	ColdWaterFaucet.getWater = function(quantity){
+		//Try to replicate super.getWater(quantity)
 		var water = ColdWaterFaucet.prototype.getWater(quantity);
 		water.WaterTemperature = faucetWaterTemperature.Cold;
 		return water;

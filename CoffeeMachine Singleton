@@ -1,11 +1,16 @@
 var flowControl = {None : 0, Low : 1, Medium : 2, High : 4};
 var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 
+//Objects created as self-invoking functions
 (function(Water, undefined){
+	//private instances
 	var waterTemperature = faucetWaterTemperature.NotSet;
 	var quantity;
+	//public instances
 	Water.WaterTemperature = waterTemperature;
 	Water.Quantity = quantity;
+
+	//Equivalent to get and set methods in C#
 	Water.setQuantity = function(newValue){
 		this.quantity = newValue;
 	}
@@ -19,6 +24,7 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 	}
 })(window.Water = window.Water || {});
 
+//Not sure how to make object/class abstract
 (function(Faucet, undefined){
 	var flow = flowControl.None;
 	Faucet.Flow = flow;
@@ -27,10 +33,10 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 	}
 
 	Faucet.close = function(){
-		this.flow = faucetControl.None;
+		this.flow = flowControl.None;
 	}
 
-	Faucet.getWater(quantity){
+	Faucet.getWater = function(quantity){
 		var water = new Water();
 		this.open(flowControl.Low);
 		while(water.Quantity < quantity){
@@ -42,20 +48,25 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 })(window.Faucet = window.Faucet || {});
 
 (function(Faucet, undefined){
-//Correct way to inherit? Could set prototype of ColdWaterFaucet 
-//to new Faucet?
+	//Correct way to inherit? Could set prototype of ColdWaterFaucet 
+	//to new Faucet()?
+	
+	//Redefine constructor
 	Faucet.ColdWaterFaucet = function(){
 		this.getWater = getWater;
 	}
 
 	function getWater(quantity){
+		//trying to replicate super.getWater(quantity)
 		var water = Faucet.getWater(quantity);
 		water.WaterTemperature = faucetWaterTemperature.Cold;
 		return water;
 	}
-})(window.Faucet = window.Faucet || {});
+})(window.Faucet = window.Faucet || {}); //Apparently this (<--)
+										 //takes care of singleton logic
 
-(function(Faucet, undefined)){
+(function(Faucet, undefined){
+
 	Faucet.WarmWaterFaucet = function(){
 		this.getWater = getWater;
 	}
@@ -65,4 +76,4 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 		water.WaterTemperature = faucetWaterTemperature.Warm;
 		return water;
 	}
-}(window.Faucet = window.Faucet || {});
+})(window.Faucet = window.Faucet || {});
