@@ -9,9 +9,10 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 	//public instances
 	Water.WaterTemperature = waterTemperature;
 	Water.Quantity = quantity;
+	Water.setQuantity = setQuantity
 
 	//Equivalent to get and set methods in C#
-	Water.setQuantity = function(newValue){
+	function setQuantity(newValue){
 		this.quantity = newValue;
 	}
 
@@ -62,8 +63,7 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 		water.WaterTemperature = faucetWaterTemperature.Cold;
 		return water;
 	}
-})(window.Faucet = window.Faucet || {}); //Apparently this (<--)
-										 //takes care of singleton logic
+})(window.Faucet = window.Faucet || {}); //takes care of singleton logic?
 
 (function(Faucet, undefined){
 
