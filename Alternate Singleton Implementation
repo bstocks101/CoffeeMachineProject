@@ -41,7 +41,7 @@ function Faucet(){
 	}
 }
 
-function ColdWaterFaucet(){
+/*function ColdWaterFaucet(){
 	var instance = null;
 
 	function constructor(){
@@ -63,24 +63,25 @@ function ColdWaterFaucet(){
 			return instance;
 		}
 	}
-}
+} */
 
 function WarmWaterFaucet(){
 	var instance = null;
 
 	function constructor(){
-		return{
-			this.prototype = new Faucet();
-			this.getWater = function(quantity){
+		var obj = {			
+			getWater: function(quantity){
 				var water = this.prototype.getWater(quantity);
 				alert("sub");
 				water.WaterTemperature = faucetWaterTemperature.Warm;
 				return water;
 			}
 		}
+		obj.prototype = new Faucet();
+		return obj;
 	}
-	return{
-		getInstance = function(){
+	return {
+		getInstance : function(){
 			if(!instance){
 				instance = constructor();
 			}

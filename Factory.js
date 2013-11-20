@@ -65,7 +65,7 @@ function ColdWaterSource(){
 	
 }
 
-function Faucet()){
+function Faucet(){
 	var flow = flowControl.None;
 	Faucet.Flow = flow;
 	Faucet.open = function(flow){
@@ -98,48 +98,40 @@ function Faucet()){
 
 function ColdWaterFaucet(){
 	var instance = null;
+	this.prototype = new Faucet();
 
-	function constructor(){
-		return{
-			this.prototype = new Faucet();
-			this.getWater = function(quantity){
-				var water = this.prototype.getWater(quantity);
-				alert("sub");
-				water.WaterTemperature = faucetWaterTemperature.Cold;
-				return water;
-			}
+	function constructor(){		
+		this.getWater = function(quantity){
+			var water = this.prototype.getWater(quantity);
+			alert("sub");
+			water.WaterTemperature = faucetWaterTemperature.Cold;
+			return water;
 		}
 	}
-	return{
-		getInstance = function(){
-			if(!instance){
-				instance = constructor();
-			}
-			return instance;
+	this.getInstance = function(){
+		if(!instance){
+			instance = new constructor();
 		}
+		return instance;
 	}
 }
 
 function WarmWaterFaucet(){
 	var instance = null;
+	this.prototype = new Faucet();
 
-	function constructor(){
-		return{
-			this.prototype = new Faucet();
-			this.getWater = function(quantity){
-				var water = this.prototype.getWater(quantity);
-				alert("sub");
-				water.WaterTemperature = faucetWaterTemperature.Warm;
-				return water;
-			}
+	function constructor(){		
+		this.getWater = function(quantity){
+			var water = this.prototype.getWater(quantity);
+			alert("sub");
+			water.WaterTemperature = faucetWaterTemperature.Warm;
+			return water;
 		}
 	}
-	return{
-		getInstance = function(){
-			if(!instance){
-				instance = constructor();
-			}
-			return instance;
+	this.getInstance = function(){
+		if(!instance){
+			instance = new constructor();
 		}
+		return instance;
 	}
 }
