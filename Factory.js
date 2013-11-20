@@ -1,14 +1,12 @@
 var flowControl = {None : 0, Low : 1, Medium : 2, High : 4};
 var faucetWaterTemperature = { Notset : 0, Cold : 1, Warm : 2};
 
-(function(Water, undefined){
+function Water(){
 	var waterTemperature = faucetWaterTemperature.NotSet;
 	var quantity;
 	Water.WaterTemperature = waterTemperature;
 	Water.Quantity = quantity;
-	Water.setQuantity = setQuantity
-
-	function setQuantity(newValue){
+	Water.setQuantity = function(newValue){
 		this.quantity = newValue;
 	}
 
@@ -19,10 +17,10 @@ var faucetWaterTemperature = { Notset : 0, Cold : 1, Warm : 2};
 	Water.add = function(quantity){
 		this.quantity += quantity;
 	}
-})(window.Water = window.Water || {});
+}
 
 
-(function(WaterFactory, undefined){
+function WaterFactory(){
 	WaterFactory.getColdWater = function(quantity){
 		return getFaucet(getWaterSource(faucetWaterTemperature.Cold)).getWater(quantity);
 	}
@@ -51,23 +49,23 @@ var faucetWaterTemperature = { Notset : 0, Cold : 1, Warm : 2};
 	var createWarmWaterSource = function(){
 		return new WarmWaterSource();
 	}
-})(window.WaterFactory = window.WaterFactory || {});
+}
 
-(function(WaterSource, undefined){
-	WaterSource.WarmWaterSource = function(){
-		WaterSource.WarmWaterSource.Create = function(){
-			return Faucet.WarmWaterFaucet.getInstance;
-		}
+function WarmWaterSource(){
+	WaterSource.WarmWaterSource.Create = function(){
+		return new WarmWaterFaucet();
 	}
+}
 
-	WaterSource.ColdWaterSource = function(){
-		WaterSource.ColdWaterSource.Create = function(){
-			return Faucet.ColdWaterFaucet.getInstance;
-		}
+function ColdWaterSource(){
+
+	WaterSource.ColdWaterSource.Create = function(){
+		return new ColdWaterFaucet();
 	}
-})(window.WaterSource = window.WaterSource || {});
+	
+}
 
-(function(Faucet, undefined){
+function Faucet()){
 	var flow = flowControl.None;
 	Faucet.Flow = flow;
 	Faucet.open = function(flow){
@@ -96,55 +94,52 @@ var faucetWaterTemperature = { Notset : 0, Cold : 1, Warm : 2};
 		close();
 	}
 
-})(window.Faucet = window.Faucet || {});
+}
 
-(function(Faucet, undefined){
-	
-	Faucet.ColdWaterFaucet = function(){
-		var instance = null;
+function ColdWaterFaucet(){
+	var instance = null;
 
-		function constructor(){
-			return{
-				Faucet.ColdWaterFaucet.getWater = function(quantity){
-				var water = Faucet.getWater(quantity);
+	function constructor(){
+		return{
+			this.prototype = new Faucet();
+			this.getWater = function(quantity){
+				var water = this.prototype.getWater(quantity);
+				alert("sub");
 				water.WaterTemperature = faucetWaterTemperature.Cold;
 				return water;
-				}
 			}
 		}
-		return{
-			getInstance = function(){
-				if (!instance){
-					instance = constructor();
-				}
-				return instance;
-			}
-		}		
 	}
+	return{
+		getInstance = function(){
+			if(!instance){
+				instance = constructor();
+			}
+			return instance;
+		}
+	}
+}
 
-})(window.Faucet = window.Faucet || {});
+function WarmWaterFaucet(){
+	var instance = null;
 
-(function(Faucet, undefined){
-
-	Faucet.WarmWaterFaucet = function(){
-		var instance = null;
-
-		function constructor(){
-			return{
-				Faucet.WarmWaterFaucet.getWater = function(quantity){
-				var water = Faucet.getWater(quantity);
+	function constructor(){
+		return{
+			this.prototype = new Faucet();
+			this.getWater = function(quantity){
+				var water = this.prototype.getWater(quantity);
+				alert("sub");
 				water.WaterTemperature = faucetWaterTemperature.Warm;
 				return water;
-				}
 			}
 		}
-		return{
-			getInstance = function(){
-				if (!instance){
-					instance = constructor();
-				}
-				return instance;
-			}
-		}	
 	}
-}(window.Faucet = window.Faucet || {});
+	return{
+		getInstance = function(){
+			if(!instance){
+				instance = constructor();
+			}
+			return instance;
+		}
+	}
+}

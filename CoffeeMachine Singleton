@@ -39,6 +39,7 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 
 	Faucet.getWater = function(quantity){
 		var water = new Water();
+		alert("Super");
 		this.open(flowControl.Low);
 		while(water.Quantity < quantity){
 			water.add(this.Flow);
@@ -54,26 +55,36 @@ var faucetWaterTemperature = {Notset : 0, Cold : 1, Warm : 2};
 	
 	//Redefine constructor
 	Faucet.ColdWaterFaucet = function(){
-		this.getWater = getWater;
+
+		Faucet.ColdWaterFaucet.getWater = function(quantity){
+			var water = Faucet.getWater(quantity);
+			alert("Sub");
+			water.WaterTemperature = faucetWaterTemperature.Cold;
+			return water;
+		}
 	}
 
-	function getWater(quantity){
+/*	function getWater(quantity){
 		//trying to replicate super.getWater(quantity)
 		var water = Faucet.getWater(quantity);
+		alert("Sub");
 		water.WaterTemperature = faucetWaterTemperature.Cold;
 		return water;
-	}
+	}*/
 })(window.Faucet = window.Faucet || {}); //takes care of singleton logic?
 
 (function(Faucet, undefined){
 
 	Faucet.WarmWaterFaucet = function(){
-		this.getWater = getWater;
-	}
-
-	function getWater(quantity){
+		function getWater(quantity){
 		var water = Faucet.getWater(quantity);
 		water.WaterTemperature = faucetWaterTemperature.Warm;
 		return water;
+		}
 	}
 })(window.Faucet = window.Faucet || {});
+
+
+//Usage:
+var coldWater = Faucet.ColdWaterFaucet().getWater(50);
+var warmWater = Faucet.WarmWaterFaucet().getWater(50);
